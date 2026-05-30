@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FutureLens AI - Simulasi Keputusan Masa Depan</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Eksplorasi simulasi kemungkinan konsekuensi dari setiap keputusan Anda. FutureLens AI memproyeksikan linimasa 1 bulan, 6 bulan, dan 1 tahun ke depan secara realistis.">
+  <meta name="keywords" content="simulasi keputusan, prediksi masa depan, perencanaan karir, analisis risiko, kecerdasan buatan">
+  
+  <!-- Icons & Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Futuristic Background Elements -->
+  <div class="space-bg"></div>
+  <div class="space-grid"></div>
+  <div id="particles-container"></div>
+
+  <!-- App Wrapper -->
+  <div class="app-container">
+    
+    <!-- Main Header -->
+    <header>
+      <div class="logo-container" id="logo-btn">
+        <i class="fa-solid fa-wand-magic-sparkles logo-icon text-gradient-cosmic"></i>
+        <span class="text-gradient-cyan">FutureLens <span class="text-gradient-cosmic">AI</span></span>
+      </div>
+      <p>Sistem Simulasi Keputusan Interaktif untuk Menjelajahi Konsekuensi, Risiko, dan Alternatif Masa Depan Anda.</p>
+    </header>
+
+    <!-- LOADING OVERLAY -->
+    <div class="loading-overlay" id="loading-overlay">
+      <div class="quantum-core"></div>
+      <div class="loading-text text-gradient-cosmic">MENGANALISIS TIMELINE...</div>
+      <div class="terminal-log" id="terminal-log">
+        <!-- Javascript will insert log lines here -->
+      </div>
+    </div>
+
+    <!-- MAIN SETUP VIEW -->
+    <div class="setup-view" id="setup-view">
+      
+      <!-- Decision input Form -->
+      <section class="glass-panel glass-panel-cyan form-section">
+        <h2 class="text-gradient-cyan" style="margin-bottom: 20px; font-size: 1.5rem; display: flex; align-items: center; gap: 10px;">
+          <i class="fa-solid fa-sliders"></i> Parameter Keputusan
+        </h2>
+        
+        <form id="decision-form">
+          <div class="form-group">
+            <label for="category-select">Kategori Keputusan</label>
+            <select id="category-select" class="input-cyber" required>
+              <option value="" disabled selected>Pilih Kategori...</option>
+              <option value="Karir">Karir / Pekerjaan</option>
+              <option value="Finansial">Finansial / Investasi</option>
+              <option value="Pendidikan">Pendidikan / Akademis</option>
+              <option value="Hubungan">Hubungan / Personal</option>
+              <option value="Bisnis">Bisnis / Usaha</option>
+              <option value="Kesehatan">Kesehatan / Gaya Hidup</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="decision-text">Keputusan Utama</label>
+            <textarea id="decision-text" class="input-cyber" placeholder="Contoh: Resign dari pekerjaan kantoran saat ini untuk memulai bisnis startup software engineering secara penuh waktu." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="info-text">Informasi Pendukung (Konteks Ekstra)</label>
+            <textarea id="info-text" class="input-cyber" placeholder="Contoh: Memiliki tabungan darurat untuk 6 bulan, sudah merancang produk MVP, tetapi belum memiliki pelanggan berbayar pertama." required></textarea>
+          </div>
+
+          <button type="submit" class="btn-cyber" id="submit-btn">
+            <span>Mulai Simulasi Timeline</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </form>
+      </section>
+
+      <!-- Preset Scenarios Section -->
+      <section class="glass-panel glass-panel-fuchsia presets-section">
+        <h2 class="text-gradient-cosmic" style="margin-bottom: 10px; font-size: 1.4rem; display: flex; align-items: center; gap: 10px;">
+          <i class="fa-solid fa-bolt"></i> Skenario Preset
+        </h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Pilih salah satu contoh skenario populer di bawah ini untuk melihat hasil simulasi secara instan:</p>
+        
+        <div class="presets-grid" id="presets-grid">
+          <!-- Presets dynamically loaded from JS -->
+        </div>
+      </section>
+
+    </div>
+
+    <!-- MAIN SIMULATION DASHBOARD VIEW -->
+    <div class="dashboard-view" id="dashboard-view">
+      
+      <!-- Dashboard Sub-Header Card -->
+      <div class="glass-panel glass-panel-cyan dashboard-header">
+        <div class="header-meta">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="cyber-badge cyber-badge-cyan" id="dash-badge-category">Kategori</span>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Simulasi Probabilitas Keputusan</span>
+          </div>
+          <h2 class="text-gradient-cyan" id="dash-title-decision" style="font-size: 1.3rem; margin-top: 8px;">Keputusan Pengguna</h2>
+        </div>
+        
+        <div class="dashboard-actions">
+          <button class="btn-cyber btn-secondary" id="back-btn" style="padding: 10px 18px; font-size: 0.85rem;">
+            <i class="fa-solid fa-chevron-left"></i> Edit Keputusan
+          </button>
+          <button class="btn-cyber" id="print-btn" style="padding: 10px 18px; font-size: 0.85rem;">
+            <i class="fa-solid fa-print"></i> Cetak Laporan
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Dashboard Grid -->
+      <div class="dashboard-grid">
+        
+        <!-- Left: Interactive Timelines -->
+        <div class="glass-panel timeline-section">
+          
+          <!-- Timeline Selector Tabs -->
+          <nav class="timeline-nav">
+            <button class="timeline-tab active" data-timeline="1month" id="tab-1m">
+              <i class="fa-regular fa-clock"></i> 1 Bulan Kemudian
+            </button>
+            <button class="timeline-tab" data-timeline="6month" id="tab-6m">
+              <i class="fa-regular fa-calendar-days"></i> 6 Bulan Kemudian
+            </button>
+            <button class="timeline-tab" data-timeline="1year" id="tab-1y">
+              <i class="fa-solid fa-hourglass-half"></i> 1 Tahun Kemudian
+            </button>
+          </nav>
+
+          <!-- Timeline Panels Container -->
+          <div id="timeline-panels">
+            
+            <!-- PANEL: 1 Bulan -->
+            <div class="timeline-content-panel active" id="panel-1month">
+              <div class="timeline-details">
+                <div class="satisfaction-indicator">
+                  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;">
+                    <span style="font-weight: 600; color: var(--neon-cyan);">TINGKAT KEPUASAN TIMELINE</span>
+                    <span style="font-weight: 800; color: white;" id="satisfaction-val-1m">75%</span>
+                  </div>
+                  <div class="satisfaction-bar-container">
+                    <div class="satisfaction-bar" id="satisfaction-bar-1m"></div>
+                  </div>
+                </div>
+
+                <div class="condition-box" id="condition-1m">
+                  <!-- Condition text goes here -->
+                </div>
+
+                <div class="timeline-split">
+                  <div class="consequence-card best">
+                    <h4><i class="fa-solid fa-circle-check"></i> Keuntungan / Peluang</h4>
+                    <ul class="consequence-list" id="best-list-1m">
+                      <!-- Best case bullets -->
+                    </ul>
+                  </div>
+
+                  <div class="consequence-card worst">
+                    <h4><i class="fa-solid fa-circle-exclamation"></i> Risiko / Tantangan</h4>
+                    <ul class="consequence-list" id="worst-list-1m">
+                      <!-- Worst case bullets -->
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PANEL: 6 Bulan -->
+            <div class="timeline-content-panel" id="panel-6month">
+              <div class="timeline-details">
+                <div class="satisfaction-indicator">
+                  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;">
+                    <span style="font-weight: 600; color: var(--neon-cyan);">TINGKAT KEPUASAN TIMELINE</span>
+                    <span style="font-weight: 800; color: white;" id="satisfaction-val-6m">60%</span>
+                  </div>
+                  <div class="satisfaction-bar-container">
+                    <div class="satisfaction-bar" id="satisfaction-bar-6m"></div>
+                  </div>
+                </div>
+
+                <div class="condition-box" id="condition-6m">
+                  <!-- Condition text goes here -->
+                </div>
+
+                <div class="timeline-split">
+                  <div class="consequence-card best">
+                    <h4><i class="fa-solid fa-circle-check"></i> Keuntungan / Peluang</h4>
+                    <ul class="consequence-list" id="best-list-6m">
+                      <!-- Best case bullets -->
+                    </ul>
+                  </div>
+
+                  <div class="consequence-card worst">
+                    <h4><i class="fa-solid fa-circle-exclamation"></i> Risiko / Tantangan</h4>
+                    <ul class="consequence-list" id="worst-list-6m">
+                      <!-- Worst case bullets -->
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PANEL: 1 Tahun -->
+            <div class="timeline-content-panel" id="panel-1year">
+              <div class="timeline-details">
+                <div class="satisfaction-indicator">
+                  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;">
+                    <span style="font-weight: 600; color: var(--neon-cyan);">TINGKAT KEPUASAN TIMELINE</span>
+                    <span style="font-weight: 800; color: white;" id="satisfaction-val-1y">50%</span>
+                  </div>
+                  <div class="satisfaction-bar-container">
+                    <div class="satisfaction-bar" id="satisfaction-bar-1y"></div>
+                  </div>
+                </div>
+
+                <div class="condition-box" id="condition-1y">
+                  <!-- Condition text goes here -->
+                </div>
+
+                <div class="timeline-split">
+                  <div class="consequence-card best">
+                    <h4><i class="fa-solid fa-circle-check"></i> Keuntungan / Peluang</h4>
+                    <ul class="consequence-list" id="best-list-1y">
+                      <!-- Best case bullets -->
+                    </ul>
+                  </div>
+
+                  <div class="consequence-card worst">
+                    <h4><i class="fa-solid fa-circle-exclamation"></i> Risiko / Tantangan</h4>
+                    <ul class="consequence-list" id="worst-list-1y">
+                      <!-- Worst case bullets -->
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Right: Scores Grid & Future Capsule -->
+        <div class="matrix-section">
+          
+          <!-- Scores Summary Card -->
+          <div class="glass-panel glass-panel-cyan scores-card">
+            <h3 class="text-gradient-cyan" style="font-size: 1.25rem; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-chart-simple"></i> Future Matrix Scores
+            </h3>
+            
+            <div class="scores-grid">
+              
+              <!-- Widget 1: Happiness -->
+              <div class="score-widget">
+                <div class="score-label">Happiness</div>
+                <div class="gauge-container">
+                  <svg class="gauge-svg">
+                    <circle class="gauge-bg" cx="45" cy="45" r="40"></circle>
+                    <circle class="gauge-fill gauge-fill-cyan" id="gauge-happiness" cx="45" cy="45" r="40"></circle>
+                  </svg>
+                  <div class="gauge-value" id="val-happiness">0</div>
+                </div>
+                <div class="score-desc" id="desc-happiness">Tingkat kebahagiaan psikologis & mental.</div>
+              </div>
+
+              <!-- Widget 2: Regret -->
+              <div class="score-widget">
+                <div class="score-label">Regret</div>
+                <div class="gauge-container">
+                  <svg class="gauge-svg">
+                    <circle class="gauge-bg" cx="45" cy="45" r="40"></circle>
+                    <circle class="gauge-fill gauge-fill-fuchsia" id="gauge-regret" cx="45" cy="45" r="40"></circle>
+                  </svg>
+                  <div class="gauge-value" id="val-regret">0</div>
+                </div>
+                <div class="score-desc" id="desc-regret">Potensi penyesalan di masa depan.</div>
+              </div>
+
+              <!-- Widget 3: Financial -->
+              <div class="score-widget">
+                <div class="score-label">Financial</div>
+                <div class="gauge-container">
+                  <svg class="gauge-svg">
+                    <circle class="gauge-bg" cx="45" cy="45" r="40"></circle>
+                    <circle class="gauge-fill gauge-fill-emerald" id="gauge-financial" cx="45" cy="45" r="40"></circle>
+                  </svg>
+                  <div class="gauge-value" id="val-financial">0</div>
+                </div>
+                <div class="score-desc" id="desc-financial">Dampak finansial positif vs negatif.</div>
+              </div>
+
+              <!-- Widget 4: Risk -->
+              <div class="score-widget">
+                <div class="score-label">Risk</div>
+                <div class="gauge-container">
+                  <svg class="gauge-svg">
+                    <circle class="gauge-bg" cx="45" cy="45" r="40"></circle>
+                    <circle class="gauge-fill gauge-fill-amber" id="gauge-risk" cx="45" cy="45" r="40"></circle>
+                  </svg>
+                  <div class="gauge-value" id="val-risk">0</div>
+                </div>
+                <div class="score-desc" id="desc-risk">Tingkat ketidakpastian & bahaya kegagalan.</div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Time Capsule / Future Message Card -->
+          <div class="glass-panel glass-panel-fuchsia time-capsule-card">
+            <h3 class="text-gradient-cosmic" style="font-size: 1.25rem;">
+              <i class="fa-solid fa-envelope-open-text"></i> Future Time Capsule
+            </h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Pesan yang dikirim oleh dirimu dari masa depan setelah menjalani simulasi ini.</p>
+            
+            <div class="envelope-trigger" id="open-capsule-btn">
+              <i class="fa-solid fa-envelope-open envelope-icon"></i>
+              <span class="envelope-caption">Buka Pesan Masa Depan</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom Fullwidth: Decision Alternatives -->
+        <div class="glass-panel alternatives-section">
+          <div class="alternatives-title-row">
+            <i class="fa-solid fa-code-fork"></i>
+            <h3 class="text-gradient-cosmic" style="font-size: 1.3rem;">Nexus Alternatif Keputusan</h3>
+          </div>
+          
+          <div class="alternatives-grid" id="alternatives-container">
+            <!-- Alternatives loaded from JS -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FUTURE MESSAGE HOLOGRAM MODAL -->
+  <div class="modal-overlay" id="capsule-modal">
+    <div class="modal-content">
+      <button class="modal-close" id="close-capsule-btn"><i class="fa-solid fa-xmark"></i></button>
+      
+      <div class="capsule-header">
+        <i class="fa-solid fa-circle-nodes"></i>
+        <h3 class="text-gradient-cyan">Holographic Transmission</h3>
+      </div>
+      
+      <div class="capsule-body cursor-typing" id="capsule-message-text">
+        <!-- Message typed dynamically here -->
+      </div>
+      
+      <p style="font-size: 0.75rem; color: var(--text-dark); margin-top: 15px; text-align: right; font-style: italic;">
+        — Terkirim dari +1 Tahun di Garis Waktu Simulasi
+      </p>
+    </div>
+  </div>
+
+  <!-- Javascript Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
